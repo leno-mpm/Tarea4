@@ -32,7 +32,7 @@ public class ReservaBase implements Reserva {
         }else{
             this.cabina=cabinasDisponibles.get(0);
         }
-        usuario.getReservas().add(this);
+        // usuario.getReservas().add(this);
         this.estado= EstadoReserva.RESERVADA;
     }
 

@@ -104,6 +104,7 @@ public class ViajeCruceroIT {
         Usuario usuario = new Usuario("Juan", "juan@mail.com", "0992313206", n);
         Reserva reserva = new ReservaBase(1, viaje, usuario, fechaSalida, new PoliticaCancelacion("Flexible", 1), "Balcón");
         viaje.agregarReserva(reserva);
+        usuario.agregarReserva(reserva);
         assertTrue(viaje.getReservas().contains(reserva));
         assertTrue(viaje.getObservadores().contains(usuario));
         assertEquals(EstadoCabina.OCUPADA, cabina1.getEstado());

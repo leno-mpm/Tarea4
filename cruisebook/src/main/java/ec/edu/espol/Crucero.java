@@ -1,5 +1,6 @@
 package ec.edu.espol;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,21 +59,41 @@ public class Crucero {
     }
 
     //mostrar las fechas de los viajes programados
-    public void mostrarViajesProgramados() {
+    public boolean mostrarViajesProgramados() {
+        if (viajesProgramados.isEmpty()) {
+            System.out.println("No hay viajes programados para el crucero: "+ nombre);
+            return false;
+        }
         System.out.println("Viajes programados para el crucero " + nombre + ":");
         for (ViajeCrucero viaje : viajesProgramados) {
             System.out.println("Fecha de salida: " + viaje.getFechaSalida());
         }
+        return true;
     }
 
     public ViajeCrucero buscarViajePorFecha(Date nuevaFecha) {
         if (nuevaFecha == null) throw new IllegalArgumentException("No se puede buscar una fecha nula.");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (ViajeCrucero viaje : viajesProgramados) {
-            if (viaje.getFechaSalida().equals(nuevaFecha)) {
+            String fechaViajeStr = sdf.format(viaje.getFechaSalida());
+            String nuevaFechaStr = sdf.format(nuevaFecha);
+            if (fechaViajeStr.equals(nuevaFechaStr)) {
                 return viaje;
             }
         }
         return null; // No se encontró un viaje con la fecha especificada
+    }
+
+    public void setViajesProgramados(List<ViajeCrucero> viajesProgramados) {
+        this.viajesProgramados = viajesProgramados;
+    }
+
+    public PoliticaCancelacion getPoliticaCancelacion() {
+        return politicaCancelacion;
+    }
+
+    public void setPoliticaCancelacion(PoliticaCancelacion politicaCancelacion) {
+        this.politicaCancelacion = politicaCancelacion;
     }
     
 

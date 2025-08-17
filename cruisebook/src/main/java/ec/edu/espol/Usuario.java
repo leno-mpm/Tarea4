@@ -1,5 +1,7 @@
 package ec.edu.espol;
 
+import java.beans.SimpleBeanInfo;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,13 +52,24 @@ public class Usuario implements Observador {
     }
     
 
+    public void agregarReserva(Reserva reserva){
+        if (reserva == null) {
+            throw new IllegalArgumentException("La reserva no puede ser nula");
+        }
+        if (reservas.contains(reserva)) {
+            throw new IllegalArgumentException("La reserva ya existe");
+        }
+        reservas.add(reserva);
+        reserva.setEstado(EstadoReserva.RESERVADA);
+    }
+
     // Cancelar reserva
-    public void cancelarReserva(Reserva reserva) {
+    public void cancelarReserva(Reserva reserva, Crucero crucero) {
         if (reserva == null || !reservas.contains(reserva)) {
             throw new IllegalArgumentException("Reserva no encontrada o no pertenece al usuario.");
         }
         PoliticaCancelacion politica = reserva.getPoliticaCancelacion();
-        if (politica.verificarCancelacion(reserva)) {
+        if (politica.verificarCancelacion(reserva, crucero)) {
             reserva.setEstado(EstadoReserva.CANCELADA);
             reserva.getViajeCrucero().eliminarReserva(reserva);
             procesarReembolso();
@@ -77,18 +90,22 @@ public class Usuario implements Observador {
 
         Scanner sc = new Scanner(System.in);
         String respuesta = sc.nextLine();
-
-        switch (respuesta.toUpperCase()) {
-            case "R":
-                cancelarReservaConReembolso(reserva);
-                break;
-            case "M":
-                modificarReservaSinCargo(reserva);
-                break;
-            default:
-                System.out.println("Opción no válida, reserva mantenida.");
-        }
+        try {
+            switch (respuesta.toUpperCase()) {
+                case "R":
+                    cancelarReservaConReembolso(reserva);
+                    break;
+                case "M":
+                    modificarReservaSinCargo(reserva);
+                    break;
+                default:
+                    System.out.println("Opción no válida, reserva mantenida.");
+            }
         // No cerramos Scanner para evitar errores posteriores
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
     }
 
 
@@ -104,39 +121,38 @@ public class Usuario implements Observador {
     }
 
     
-    private void modificarReservaSinCargo(Reserva reserva) {
+    private void modificarReservaSinCargo(Reserva reserva) throws Exception{
         //CREAR UNA NUEVA RESERVA  EN OTRO VIAJE CRUCERO
-        System.out.println("Modificando reserva sin cargos para la reserva: " + reserva.getId());      
-        reserva.getViajeCrucero().getCrucero().mostrarViajesProgramados();
-        System.out.println("Selecione la fecha del nuevo viaje: ");
-        Scanner sc = new Scanner(System.in);
-        String fechaStr = sc.nextLine();
-        Date nuevaFecha = new Date(fechaStr);
-        ViajeCrucero nuevoViaje = reserva.getViajeCrucero().getCrucero().buscarViajePorFecha(nuevaFecha);
-        if (nuevoViaje != null) {
+        System.out.println("Modificando reserva sin cargos para la reserva: " + reserva.getId());
+        if (reserva.getViajeCrucero().getCrucero().mostrarViajesProgramados()) {
+            System.out.println("Selecione la fecha del nuevo viaje: ");
+            Scanner sc = new Scanner(System.in);
+            String fechaStr = sc.nextLine();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date nuevaFecha = sdf.parse(fechaStr);  
+            ViajeCrucero nuevoViaje = reserva.getViajeCrucero().getCrucero().buscarViajePorFecha(nuevaFecha);
+            if (nuevoViaje != null) {
+                System.out.println("Ingrese el tipo de cabina para la nueva reserva: ");
+                String tipoCabina = sc.nextLine();
+                if (!nuevoViaje.verificarCabina(tipoCabina)) {
+                    System.out.println("La cabina no pertenece a este crucero. Reserva original mantenida.");
+                    return;
+                }
+                List<Cabina> cabinasDisponibles = nuevoViaje.buscarCabinasDisponibles(tipoCabina);
+                if (cabinasDisponibles.isEmpty()) {
+                    System.out.println("No hay cabinas disponibles del tipo " + tipoCabina + ". Reserva original mantenida.");
+                    return;
+                }
             
-
-            System.out.println("Ingrese el tipo de cabina para la nueva reserva: ");
-            String tipoCabina = sc.nextLine();
-            if (!nuevoViaje.verificarCabina(tipoCabina)) {
-                System.out.println("La cabina no pertenece a este crucero. Reserva original mantenida.");
-                return;
+                Cabina cabinaAsignada = cabinasDisponibles.get(0);
+                reserva.setViajeCrucero(nuevoViaje);
+                reserva.setCabina(cabinaAsignada);
+                reserva.setEstado(EstadoReserva.CONFIRMADA);
+                System.out.println("Reserva modificada al nuevo viaje en fecha: " + nuevaFecha);
+            } else {
+                System.out.println("No hay viaje disponible en la fecha seleccionada. Reserva original mantenida.");
             }
-            List<Cabina> cabinasDisponibles = nuevoViaje.buscarCabinasDisponibles(tipoCabina);
-            if (cabinasDisponibles.isEmpty()) {
-                System.out.println("No hay cabinas disponibles del tipo " + tipoCabina + ". Reserva original mantenida.");
-                return;
-            }
-           
-            Cabina cabinaAsignada = cabinasDisponibles.get(0);
-            reserva.setViajeCrucero(nuevoViaje);
-            reserva.setCabina(cabinaAsignada);
-            reserva.setEstado(EstadoReserva.CONFIRMADA);
-            System.out.println("Reserva modificada al nuevo viaje en fecha: " + nuevaFecha);
-        } else {
-            System.out.println("No hay viaje disponible en la fecha seleccionada. Reserva original mantenida.");
-        }
-        
+        }      
     }        
 
     private void procesarReembolso() {

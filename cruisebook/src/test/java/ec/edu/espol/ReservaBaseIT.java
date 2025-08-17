@@ -40,7 +40,7 @@ public class ReservaBaseIT {
         ViajeCrucero viaje = crearViajeCruceroValido();
         Usuario usuario = crearUsuarioConSMS();
 
-        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "FBalcon");
+        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "Balcón");
 
         assertThrows(IllegalArgumentException.class, () -> reserva.actualizacionesImportantes(null));
     }
@@ -50,7 +50,7 @@ public class ReservaBaseIT {
         ViajeCrucero viaje = crearViajeCruceroValido();
         Usuario usuario = crearUsuarioConSMS();
 
-        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "FBalcon");
+        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "Balcón");
 
         assertDoesNotThrow(() -> reserva.actualizacionesImportantes("Mensaje importante"));
     }
@@ -60,7 +60,7 @@ public class ReservaBaseIT {
         ViajeCrucero viaje = crearViajeCruceroValido();
         Usuario usuario = crearUsuarioConSMS();
 
-        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "FBalcon");
+        ReservaBase reserva = new ReservaBase(1, viaje, usuario, new Date(), new PoliticaCancelacion("", 1), "Balcón");
 
         Double costo = reserva.calcularCostoTotal();
         assertEquals(250.0, costo);

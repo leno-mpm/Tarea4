@@ -28,11 +28,13 @@ public class UsuarioIT {
     @BeforeAll
     static void antesDeTodo(){
         politicaCancelacion = new PoliticaCancelacion("Flexible", 10);
-        List<Cabina> cabinas = List.of(new CabinaBalcon(3, EstadoCabina.DISPONIBLE, politicaCancelacion), new CabinaSuite(4, EstadoCabina.DISPONIBLE, politicaCancelacion));
+        List<Cabina> cabinas = List.of(new CabinaBalcon(3, EstadoCabina.DISPONIBLE, politicaCancelacion), new CabinaSuite(4, EstadoCabina.DISPONIBLE, politicaCancelacion),new CabinaSuite(4, EstadoCabina.DISPONIBLE, politicaCancelacion));
         crucero = new Crucero("Crucero Caribe", "Caribe", "Un viaje por el Caribe", politicaCancelacion);
         viajeCrucero = new ViajeCrucero(new Date(), cabinas, "Itinerario", crucero);
         usuario = new Usuario("Gabriel", "ejemplo@gmail.com", "0935267281", new Email());
         reservaBase = new ReservaBase(0, viajeCrucero, usuario, new Date(), politicaCancelacion, "Suite");
+        usuario.agregarReserva(reservaBase);
+        viajeCrucero.agregarReserva(reservaBase);
 
     }
 
@@ -95,7 +97,7 @@ public class UsuarioIT {
     void testCancelarReservaNulo(){
         
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(null);
+            usuario.cancelarReserva(null, null);
         });
 
         assertEquals("Reserva no encontrada o no pertenece al usuario.", e.getMessage());
@@ -106,7 +108,7 @@ public class UsuarioIT {
     void testCancelarReservaNoEncontrado(){
 
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(new ReservaBase(1, viajeCrucero, new Usuario("Milena", "ejemplo@gmail.com", "0935627382", new Email()), new Date(), politicaCancelacion, "Suite"));
+            usuario.cancelarReserva(new ReservaBase(1, viajeCrucero, new Usuario("Milena", "ejemplo@gmail.com", "0935627382", new Email()), new Date(), politicaCancelacion, "Suite"), viajeCrucero.getCrucero());
         });
 
         assertEquals("Reserva no encontrada o no pertenece al usuario.", e.getMessage());
@@ -115,8 +117,10 @@ public class UsuarioIT {
     @Test
     @DisplayName("Deberia lanzar un IllegalArgumentException con el mensaje de que no se puede cancelar debido a las Politicas")
     void testCancelarReservaPolitica(){
+        Reserva reserva = new ReservaBase(3, viajeCrucero, usuario, new Date(), new PoliticaCancelacion("CancelacionA", 11), "Suite");
+        usuario.agregarReserva(reserva);
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(new ReservaBase(3, viajeCrucero, usuario, new Date(), new PoliticaCancelacion("CancelacionA", 11), "Suite"));
+            usuario.cancelarReserva(reserva, viajeCrucero.getCrucero());
         });
 
         assertEquals("No se puede cancelar según la política de cancelación.", e.getMessage());
@@ -125,7 +129,7 @@ public class UsuarioIT {
     @Test
     @DisplayName("Deberia de cambiar la reserva a estado CANCELADA y poner en estado DISPONIBLE la cabina de la reserva")
     void testCancelarReserva(){
-        usuario.cancelarReserva(reservaBase);
+        usuario.cancelarReserva(reservaBase, viajeCrucero.getCrucero());
         for (Cabina c: viajeCrucero.getCabinas()) {
             if (c.equals(reservaBase.getCabina())) {
                 cabina = c;
@@ -164,8 +168,9 @@ public class UsuarioIT {
     @Test
     @DisplayName("Deberia de cambiar la reserva a estado CANCELADA y poner en estado DISPONIBLE la cabina de la reserva sin importar la Politica de Cancelacion")
     void testCancelarReservaConReembolso(){
-        Reserva reserva2 = new ReservaBase(3, viajeCrucero, usuario, new Date(), new PoliticaCancelacion("Hola", 12), "Suite");
-        usuario.cancelarReserva(reserva2);
+        Reserva reserva2 = new ReservaBase(3, viajeCrucero, usuario, new Date(), politicaCancelacion, "Suite");
+        usuario.agregarReserva(reserva2);
+        usuario.cancelarReserva(reserva2, viajeCrucero.getCrucero());
         for (Cabina c: viajeCrucero.getCabinas()) {
             if (c.equals(reserva2.getCabina())) {
                 cabina = c;

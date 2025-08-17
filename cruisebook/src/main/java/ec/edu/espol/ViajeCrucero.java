@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ViajeCrucero {
     private Date fechaSalida;
-    private List<Cabina> cabinas;// {Balcon, , Estándar, Económica};
+    private List<Cabina> cabinas;// {Balcon, Suite, Estándar, Económica};
     private List<Reserva> reservas = new ArrayList<>();
     private String itinerario;
     private List<Observador> observadores = new ArrayList<>();
@@ -67,11 +67,15 @@ public class ViajeCrucero {
     }
 
     private void notificarObservadores(String mensaje) {
-        for (Observador observador : observadores) {
+        List<Observador> copiaObservadores =new ArrayList<>(observadores);
+ 
+        for (Observador observador : copiaObservadores) {
             observador.notificar(mensaje);
             Reserva reservaBuscada= buscarReserva(observador);
-            reservaBuscada.setEstado(EstadoReserva.PENDIENTE);
-            observador.accionNotificar(reservaBuscada);
+            if (reservaBuscada != null) {
+                reservaBuscada.setEstado(EstadoReserva.PENDIENTE);
+                observador.accionNotificar(reservaBuscada);
+            }
         }
     }
 

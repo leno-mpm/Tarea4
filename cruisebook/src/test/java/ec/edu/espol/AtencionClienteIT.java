@@ -14,14 +14,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AtencionClienteIT {
     @Test
     void testAtenderProblema(){
-        AtencionCliente atencioncliente= new AtencionCliente(null);
+        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        AtencionCliente atencioncliente = new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         boolean solucion =atencioncliente.atenderProblema("Problema", usuario);
         assertTrue(solucion);
     }
     @Test
     void testAtenderProblema_UsuarioNull(){
-        AtencionCliente atencioncliente= new AtencionCliente(null);
+        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema("Problema", null);});
         assertEquals("Los paramatros no pueden ser nulos.",e.getMessage());
 
@@ -29,7 +31,8 @@ public class AtencionClienteIT {
      
     @Test
     void testAtenderProblema_DescripcionNull(){
-        AtencionCliente atencioncliente= new AtencionCliente(null);
+        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema(null, usuario);});
         assertEquals("Los paramatros no pueden ser nulos.",e.getMessage());
@@ -37,7 +40,8 @@ public class AtencionClienteIT {
     
     @Test
     void testAtenderProblema_DescripcionVacia(){
-        AtencionCliente atencioncliente= new AtencionCliente(null);
+        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema("", usuario);});
         assertEquals("La descripcion no puede estar vacia.",e.getMessage());

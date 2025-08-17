@@ -34,22 +34,23 @@ public class PoliticaCancelacionIT {
         Cabina cabina2 = fabricaCabina.crearCabina(80.0, EstadoCabina.DISPONIBLE, new PoliticaCancelacion("Estandar", 2));
         Cabina cabina3 = fabricaCabina.crearCabina(60.0, EstadoCabina.DISPONIBLE, new PoliticaCancelacion("Economica", 3));
         FabricaCabina fabricaCabina2= new FFamiliar();
+        PoliticaCancelacion politicaCancelacion = new PoliticaCancelacion("Cancelacion1", 1);
         Cabina cabina4 = fabricaCabina2.crearCabina(120.0, EstadoCabina.DISPONIBLE, new PoliticaCancelacion("Familiar", 4));
         List<Cabina> cabinas = List.of(cabina1, cabina2, cabina3, cabina4);    
         String itinerario = "Puerto Rico - Bahamas";
-        Crucero crucero = new Crucero("Crucero Caribe", "Caribe", "Un viaje por el Caribe", new PoliticaCancelacion("Flexible", 1));
+        Crucero crucero = new Crucero("Crucero Caribe", "Caribe", "Un viaje por el Caribe", politicaCancelacion);
         ViajeCrucero viaje = new ViajeCrucero(fechaSalida, cabinas, itinerario, crucero);
         Usuario usuario = new Usuario("Juan", "juan@email.com", "1234567890", new SMS());
-        Reserva Reserva=new ReservaBase(0, viaje, usuario, null, null, cabina1.getTipo());
+        Reserva Reserva=new ReservaBase(0, viaje, usuario, null, politicaCancelacion, cabina1.getTipo());
         PoliticaCancelacion politicas= new PoliticaCancelacion("Descripcion", 1);
-        politicas.verificarCancelacion(Reserva);
-        assertTrue( politicas.verificarCancelacion(Reserva));
+        politicas.verificarCancelacion(Reserva, viaje.getCrucero());
+        assertTrue( politicas.verificarCancelacion(Reserva, viaje.getCrucero()));
     }
 
         @Test
     void testVerificarCancelacion_ReservaNull(){
         PoliticaCancelacion politicas= new PoliticaCancelacion("Descripcion", 1);
-        Exception e= assertThrows(IllegalArgumentException.class, ()->{politicas.verificarCancelacion(null);});
+        Exception e= assertThrows(IllegalArgumentException.class, ()->{politicas.verificarCancelacion(null, null);});
         assertEquals("Los paramatros no pueden ser nulos.", e.getMessage());
         
     }
