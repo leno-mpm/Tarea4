@@ -87,6 +87,7 @@ public class ReservaBase implements Reserva {
     }   
 
     public void actualizacionesImportantes(String mensaje) {
+        if (mensaje == null) throw new IllegalArgumentException("El mensaje no puede ser nulo");
         notificacion.enviarNotificacion(mensaje);
     }
 

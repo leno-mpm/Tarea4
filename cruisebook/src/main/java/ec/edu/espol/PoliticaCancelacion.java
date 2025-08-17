@@ -5,11 +5,15 @@ public class PoliticaCancelacion {
     private String descripcion;
 
     public PoliticaCancelacion(String descripcion, int id) {
+        if(descripcion==null){
+            throw new IllegalArgumentException("Los paramatros no pueden ser nulos.");
+        }
         this.descripcion = descripcion;
         this.id = id;
     }
     public boolean verificarCancelacion(Reserva reserva) {
-        if (reserva.getEstado() == EstadoReserva.CONFIRMADA) {
+        if(reserva==null) throw new IllegalArgumentException("Los paramatros no pueden ser nulos.");
+        if (reserva.getEstado() == EstadoReserva.RESERVADA) {
             return true;
         }
         return false;

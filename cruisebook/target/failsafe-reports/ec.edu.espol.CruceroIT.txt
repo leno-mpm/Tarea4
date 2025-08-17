@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ec.edu.espol.CruceroIT
+-------------------------------------------------------------------------------
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.204 s -- in ec.edu.espol.CruceroIT

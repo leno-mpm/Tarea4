@@ -43,7 +43,7 @@ public class ViajeCruceroIT {
     @DisplayName("Test Constructor vacio ViajeCrucero")
     public void testConstructorVacio() {
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            new ViajeCrucero(null, new ArrayList<>(), null, null);
+            new ViajeCrucero(null, null, null, null);
         });
         assertEquals("Los parámetros no pueden ser nulos", e.getMessage());
     }
@@ -52,6 +52,7 @@ public class ViajeCruceroIT {
     @Test
     @DisplayName("Constructor lanza excepción si cabinas es null")
     public void testConstructorCabinasNulas() {
+        
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
             new ViajeCrucero(new Date(), null, "itinerario", new Crucero("Nombre", "Destino", "Desc", new PoliticaCancelacion("Flexible", 1)));
         });

@@ -20,6 +20,7 @@ public class Crucero {
     }
 
     public void agregarViaje(ViajeCrucero viaje) {
+        if(viaje == null) throw new IllegalArgumentException("No se puede añadir un viaje nulo.");
         viajesProgramados.add(viaje);
     }
 
@@ -65,6 +66,7 @@ public class Crucero {
     }
 
     public ViajeCrucero buscarViajePorFecha(Date nuevaFecha) {
+        if (nuevaFecha == null) throw new IllegalArgumentException("No se puede buscar una fecha nula.");
         for (ViajeCrucero viaje : viajesProgramados) {
             if (viaje.getFechaSalida().equals(nuevaFecha)) {
                 return viaje;

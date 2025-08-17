@@ -13,6 +13,9 @@ public class Usuario implements Observador {
     private List<Reserva> reservas= new ArrayList<>();
 
     public Usuario(String nombre, String email, String telefono, Notificacion medio) {
+        if (nombre == null || email == null || telefono == null || medio == null) {
+            throw new IllegalArgumentException("Los parametros no pueden ser nulos");
+        }
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
@@ -50,22 +53,21 @@ public class Usuario implements Observador {
     // Cancelar reserva
     public void cancelarReserva(Reserva reserva) {
         if (reserva == null || !reservas.contains(reserva)) {
-            System.out.println("Reserva no encontrada o no pertenece al usuario.");
-            return;
+            throw new IllegalArgumentException("Reserva no encontrada o no pertenece al usuario.");
         }
         PoliticaCancelacion politica = reserva.getPoliticaCancelacion();
         if (politica.verificarCancelacion(reserva)) {
+            reserva.setEstado(EstadoReserva.CANCELADA);
             reserva.getViajeCrucero().eliminarReserva(reserva);
             procesarReembolso();
-            reservas.remove(reserva);
         } else {
-            System.out.println("No se puede cancelar según la política de cancelación.");
+            throw new IllegalArgumentException("No se puede cancelar según la política de cancelación.");
         }
     }
 
     @Override
-    public void notificar(String mensaje) {
-        medio.enviarNotificacion(mensaje);
+    public boolean notificar(String mensaje) {
+        return medio.enviarNotificacion(mensaje);
     }
    
     @Override
@@ -90,7 +92,10 @@ public class Usuario implements Observador {
     }
 
 
-    private void cancelarReservaConReembolso(Reserva reserva) {
+    public void cancelarReservaConReembolso(Reserva reserva) {
+        if (reserva == null) {
+            throw new IllegalArgumentException("La reserva no puede ser nula");
+        }
         System.out.println("Procesando cancelación y reembolso para la reserva: " + reserva.getId());
         procesarReembolso();
         reserva.getViajeCrucero().eliminarReserva(reserva);
@@ -139,6 +144,9 @@ public class Usuario implements Observador {
     }
 
     public void reportarIncidente(String detalle) {
+        if (detalle == null) {
+            throw new IllegalArgumentException("No se puede mandar un detalle nulo");
+        }
         System.out.println("Reporte de incidente del usuario " + nombre + ": " + detalle);
     }
 }

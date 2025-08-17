@@ -2,7 +2,11 @@ package ec.edu.espol;
 
 public class SMS implements Notificacion {
     @Override
-    public void enviarNotificacion(String mensaje) {
-        System.out.println("Enviando notificación por SMS: " + mensaje);
+    public boolean enviarNotificacion(String mensaje) {
+        if (mensaje== null) {
+            throw new IllegalArgumentException("No se puede enviar un mensaje Nulo");
+        }
+        System.out.println("Enviando notificación por mensajería: " + mensaje);
+        return true;
     }
 }
