@@ -82,32 +82,28 @@ public class Usuario implements Observador {
     public boolean notificar(String mensaje) {
         return medio.enviarNotificacion(mensaje);
     }
-   
+
     @Override
     public void accionNotificar(Reserva reserva) {
-        System.out.println("Notificación importante sobre su reserva: "+reserva.getId());
-        System.out.println("¿Desea cancelar y recibir reembolso (R), modificar la fecha sin cargos (M) ? (R/M)");
-
-        Scanner sc = new Scanner(System.in);
-        String respuesta = sc.nextLine();
-        try {
-            switch (respuesta.toUpperCase()) {
-                case "R":
-                    cancelarReservaConReembolso(reserva);
-                    break;
-                case "M":
-                    modificarReservaSinCargo(reserva);
-                    break;
-                default:
-                    System.out.println("Opción no válida, reserva mantenida.");
-            }
-        // No cerramos Scanner para evitar errores posteriores
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
+        // Delegación de UI
+        ReservaConsoleUI ui = new ReservaConsoleUI();
+        ui.eleccionUsuario(this, reserva);
     }
 
+    public void procesarAccionNotificacion(Reserva reserva, String opcion) {
+    if (reserva == null) throw new IllegalArgumentException("La reserva no puede ser nula");
+
+    switch (opcion.toUpperCase()) {
+        case "R":
+            cancelarReservaConReembolso(reserva);
+            break;
+        case "M":
+            modificarReservaSinCargo(reserva); 
+            break;
+        default:
+            System.out.println("Opción no válida, reserva mantenida.");
+    }
+}
 
     public void cancelarReservaConReembolso(Reserva reserva) {
         if (reserva == null) {
@@ -121,39 +117,11 @@ public class Usuario implements Observador {
     }
 
     
-    private void modificarReservaSinCargo(Reserva reserva) throws Exception{
-        //CREAR UNA NUEVA RESERVA  EN OTRO VIAJE CRUCERO
-        System.out.println("Modificando reserva sin cargos para la reserva: " + reserva.getId());
-        if (reserva.getViajeCrucero().getCrucero().mostrarViajesProgramados()) {
-            System.out.println("Selecione la fecha del nuevo viaje: ");
-            Scanner sc = new Scanner(System.in);
-            String fechaStr = sc.nextLine();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date nuevaFecha = sdf.parse(fechaStr);  
-            ViajeCrucero nuevoViaje = reserva.getViajeCrucero().getCrucero().buscarViajePorFecha(nuevaFecha);
-            if (nuevoViaje != null) {
-                System.out.println("Ingrese el tipo de cabina para la nueva reserva: ");
-                String tipoCabina = sc.nextLine();
-                if (!nuevoViaje.verificarCabina(tipoCabina)) {
-                    System.out.println("La cabina no pertenece a este crucero. Reserva original mantenida.");
-                    return;
-                }
-                List<Cabina> cabinasDisponibles = nuevoViaje.buscarCabinasDisponibles(tipoCabina);
-                if (cabinasDisponibles.isEmpty()) {
-                    System.out.println("No hay cabinas disponibles del tipo " + tipoCabina + ". Reserva original mantenida.");
-                    return;
-                }
-            
-                Cabina cabinaAsignada = cabinasDisponibles.get(0);
-                reserva.setViajeCrucero(nuevoViaje);
-                reserva.setCabina(cabinaAsignada);
-                reserva.setEstado(EstadoReserva.CONFIRMADA);
-                System.out.println("Reserva modificada al nuevo viaje en fecha: " + nuevaFecha);
-            } else {
-                System.out.println("No hay viaje disponible en la fecha seleccionada. Reserva original mantenida.");
-            }
-        }      
-    }        
+    private void modificarReservaSinCargo(Reserva reserva) {
+        // La pedida por consola se maneja en ReservaConsoleUI
+        reserva.setEstado(EstadoReserva.CONFIRMADA);
+        System.out.println("Reserva modificada exitosamente al nuevo viaje: " + reserva.getViajeCrucero().getFecha());
+    }       
 
     private void procesarReembolso() {
         System.out.println("Procesando reembolso para el usuario: " + nombre);

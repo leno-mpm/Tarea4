@@ -36,6 +36,10 @@ public class ViajeCrucero {
         }
     }
 
+    public Date getFecha(){
+        return fechaSalida;
+    }
+
     public void eliminarReserva(Reserva reserva) {
         if(reserva==null){
             throw new IllegalArgumentException("No puede ser nula la reserva");
