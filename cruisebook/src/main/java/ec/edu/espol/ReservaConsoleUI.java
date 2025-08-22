@@ -1,10 +1,15 @@
 package ec.edu.espol;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+
 @SuppressWarnings("all")
 public class ReservaConsoleUI {
+
+    private GestorReservas gestor = new GestorReservas();
+
     public void eleccionUsuario(Usuario usuario, Reserva reserva) {
         System.out.println("Notificación importante sobre su reserva: " + reserva.getId());
         System.out.println("¿Desea cancelar y recibir reembolso (R), modificar la fecha sin cargos (M)? (R/M)");
@@ -19,7 +24,7 @@ public class ReservaConsoleUI {
                 System.out.println("Error al modificar reserva: " + e.getMessage());
             }
         } else {
-            usuario.procesarAccionNotificacion(reserva, respuesta);
+            gestor.procesarAccion(usuario, reserva, respuesta);
         }
     }
 
@@ -39,8 +44,8 @@ public class ReservaConsoleUI {
 
         reasignarReserva(reserva, nuevoViaje, nuevaCabina);
 
-        // Usuario termina el proceso de notificación
-        usuario.procesarAccionNotificacion(reserva, "M");
+        // Ahora delegamos al GestorReservas para que complete la acción
+        gestor.procesarAccion(usuario, reserva, "M");
     }
 
     private ViajeCrucero seleccionarNuevaFecha(Reserva reserva) throws Exception {
@@ -83,5 +88,4 @@ public class ReservaConsoleUI {
         reserva.setCabina(nuevaCabina);
         System.out.println("Reserva modificada al nuevo viaje en fecha: " + nuevoViaje.getFecha());
     }
-
 }
