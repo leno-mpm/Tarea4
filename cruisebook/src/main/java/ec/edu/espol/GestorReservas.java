@@ -21,12 +21,12 @@ public class GestorReservas {
         System.out.println("Procesando cancelación y reembolso para la reserva: " + reserva.getId());
         procesarReembolso(usuario);
         reserva.getViajeCrucero().eliminarReserva(reserva);
-        reserva.setEstado(EstadoReserva.CANCELADA);
+        reserva.cancelada();
         System.out.println("Reserva cancelada y reembolso procesado.");
     }
 
     public void modificarReservaSinCargo(Reserva reserva) {
-        reserva.setEstado(EstadoReserva.CONFIRMADA);
+        reserva.confirmada();
         System.out.println("Reserva modificada exitosamente al nuevo viaje: " 
                 + reserva.getViajeCrucero().getFecha());
     }
