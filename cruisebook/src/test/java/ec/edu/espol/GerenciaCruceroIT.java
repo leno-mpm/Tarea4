@@ -13,25 +13,42 @@ import org.junit.jupiter.api.Test;
  * @author Mile
  */
 public class GerenciaCruceroIT {
+    GerenciaCrucero gerencia;
+    Usuario usuario;
     @Test
     void testResolverProblema_descripcionNull() {
-        GerenciaCrucero gerencia = new GerenciaCrucero();
-        Usuario usuario = new Usuario("Juan", "juan@email.com", "1234567890", new SMS());
+        gerencia =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
+        usuario = new Usuario("Juan", "juan@email.com", "1234567890", new SMS());
 
         assertThrows(IllegalArgumentException.class, () -> gerencia.resolverProblema(null, usuario));
     }
 
     @Test
     void testResolverProblema_usuarioNull() {
-        GerenciaCrucero gerencia = new GerenciaCrucero();
+        gerencia =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
 
         assertThrows(IllegalArgumentException.class, () -> gerencia.resolverProblema("Problema grave", null));
     }
 
     @Test
     void testResolverProblema_valido() {
-        GerenciaCrucero gerencia = new GerenciaCrucero();
-        Usuario usuario = new Usuario("Juan", "juan@email.com", "1234567890", new SMS());
+        gerencia =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
+       usuario = new Usuario("Juan", "juan@email.com", "1234567890", new SMS());
 
         assertDoesNotThrow(() -> gerencia.resolverProblema("Problema", usuario));
     }

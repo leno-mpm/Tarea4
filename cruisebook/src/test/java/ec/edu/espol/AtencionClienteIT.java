@@ -14,7 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AtencionClienteIT {
     @Test
     void testAtenderProblema(){
-        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
         AtencionCliente atencioncliente = new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         boolean solucion =atencioncliente.atenderProblema("Problema", usuario);
@@ -22,7 +27,12 @@ public class AtencionClienteIT {
     }
     @Test
     void testAtenderProblema_UsuarioNull(){
-        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        GerenciaCrucero gerenciaCrucero =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
         AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema("Problema", null);});
         assertEquals("Los paramatros no pueden ser nulos.",e.getMessage());
@@ -31,7 +41,12 @@ public class AtencionClienteIT {
      
     @Test
     void testAtenderProblema_DescripcionNull(){
-        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        GerenciaCrucero gerenciaCrucero =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
         AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema(null, usuario);});
@@ -40,7 +55,12 @@ public class AtencionClienteIT {
     
     @Test
     void testAtenderProblema_DescripcionVacia(){
-        GerenciaCrucero gerenciaCrucero = new GerenciaCrucero();
+        GerenciaCrucero gerenciaCrucero =  new GerenciaCrucero(
+            "Gerencia Principal", 
+            "gerencia@crucero.com", 
+            "0991234567", 
+            101
+        );
         AtencionCliente atencioncliente= new AtencionCliente(gerenciaCrucero);
         Usuario usuario = new Usuario("Francis Loayza", "faloayza@espol.edu.ec", "0955461934", new SMS());
         Exception e= assertThrows(IllegalArgumentException.class,()->{atencioncliente.atenderProblema("", usuario);});

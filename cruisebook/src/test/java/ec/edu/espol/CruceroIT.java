@@ -20,6 +20,19 @@ import org.junit.jupiter.api.Test;
  * @author Mile
  */
 public class CruceroIT {
+    Crucero crucero;
+    List<Cabina> cabinas;
+    ViajeCrucero viaje;
+    Date fecha;
+    List<Cabina> cabinas1;
+    List<Cabina> cabinas2;
+    ViajeCrucero viaje1;
+    ViajeCrucero viaje2;
+    ViajeCrucero resultado;
+    Date fechaBusqueda;
+    Date fechaExistente;
+
+
     private Crucero crearCruceroValido() {
         PoliticaCancelacion politica = new PoliticaCancelacion("Cancelación flexible", 1);
         return new Crucero("Crucero1", "Caribe", "Viaje de lujo", politica);
@@ -36,9 +49,9 @@ public class CruceroIT {
 
     @Test
     void testAgregarViaje_valido() {
-        Crucero crucero = crearCruceroValido();
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
 
@@ -47,16 +60,16 @@ public class CruceroIT {
 
     @Test
     void testAgregarViaje_null() {
-        Crucero crucero = crearCruceroValido();
+        crucero = crearCruceroValido();
 
         assertThrows(IllegalArgumentException.class, () -> crucero.agregarViaje(null));
     }
 
     @Test
     void testEliminarViaje_validoExistente() {
-        Crucero crucero = crearCruceroValido();
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
         assertEquals(1, crucero.getViajesProgramados().size());
@@ -67,9 +80,9 @@ public class CruceroIT {
 
     @Test
     void testEliminarViaje_null() {
-        Crucero crucero = crearCruceroValido();
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
         int sizeAntes = crucero.getViajesProgramados().size();
@@ -81,12 +94,12 @@ public class CruceroIT {
 
     @Test
     void testEliminarViaje_validoNoExistente() {
-        Crucero crucero = crearCruceroValido();
-        List<Cabina> cabinas1 = crearListaCabinas();
-        ViajeCrucero viaje1 = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas1, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        cabinas1 = crearListaCabinas();
+        viaje1 = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas1, "Itinerario1", crucero);
 
-        List<Cabina> cabinas2 = crearListaCabinas();
-        ViajeCrucero viaje2 = new ViajeCrucero(new Date(2025 - 1900, 7, 16), cabinas2, "Itinerario2", crucero);
+        cabinas2 = crearListaCabinas();
+        viaje2 = new ViajeCrucero(new Date(2025 - 1900, 7, 16), cabinas2, "Itinerario2", crucero);
 
         crucero.agregarViaje(viaje1);
         int sizeAntes = crucero.getViajesProgramados().size();
@@ -98,14 +111,14 @@ public class CruceroIT {
 
     @Test
     void testBuscarViajePorFecha_existente() {
-        Crucero crucero = crearCruceroValido();
-        Date fecha = new Date(2025 - 1900, 7, 15);
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(fecha, cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        fecha = new Date(2025 - 1900, 7, 15);
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(fecha, cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
 
-        ViajeCrucero resultado = crucero.buscarViajePorFecha(fecha);
+        resultado = crucero.buscarViajePorFecha(fecha);
 
         assertNotNull(resultado);
         assertEquals(fecha, resultado.getFechaSalida());
@@ -113,32 +126,32 @@ public class CruceroIT {
 
     @Test
     void testBuscarViajePorFecha_noExistente() {
-        Crucero crucero = crearCruceroValido();
-        Date fechaExistente = new Date(2025 - 1900, 7, 15);
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(fechaExistente, cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        fechaExistente = new Date(2025 - 1900, 7, 15);
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(fechaExistente, cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
 
-        Date fechaBusqueda = new Date(2025 - 1900, 7, 16);
+        fechaBusqueda = new Date(2025 - 1900, 7, 16);
 
-        ViajeCrucero resultado = crucero.buscarViajePorFecha(fechaBusqueda);
+        resultado = crucero.buscarViajePorFecha(fechaBusqueda);
 
         assertNull(resultado);
     }
 
     @Test
     void testBuscarViajePorFecha_null() {
-        Crucero crucero = crearCruceroValido();
+        crucero = crearCruceroValido();
 
         assertThrows(IllegalArgumentException.class, () -> crucero.buscarViajePorFecha(null));
     }
 
     @Test
     void testMostrarViajesProgramados() {
-        Crucero crucero = crearCruceroValido();
-        List<Cabina> cabinas = crearListaCabinas();
-        ViajeCrucero viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
+        crucero = crearCruceroValido();
+        cabinas = crearListaCabinas();
+        viaje = new ViajeCrucero(new Date(2025 - 1900, 7, 15), cabinas, "Itinerario1", crucero);
 
         crucero.agregarViaje(viaje);
 
