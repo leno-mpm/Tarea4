@@ -31,7 +31,7 @@ public class ReservaConsoleUI {
     private void prepararModificacion(Usuario usuario, Reserva reserva) throws Exception {
         System.out.println("Modificando reserva sin cargos para la reserva: " + reserva.getId());
 
-        if (!reserva.getViajeCrucero().getCrucero().mostrarViajesProgramados()) {
+        if (!reserva.getCrucero().mostrarViajesProgramados()) {
             System.out.println("No hay viajes programados. Reserva original mantenida.");
             return;
         }
@@ -56,7 +56,7 @@ public class ReservaConsoleUI {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date nuevaFecha = sdf.parse(fechaStr);
 
-        ViajeCrucero nuevoViaje = reserva.getViajeCrucero().getCrucero().buscarViajePorFecha(nuevaFecha);
+        ViajeCrucero nuevoViaje = reserva.getCrucero().buscarViajePorFecha(nuevaFecha);
         if (nuevoViaje == null) {
             System.out.println("No hay viaje disponible en la fecha seleccionada. Reserva original mantenida.");
             return null;

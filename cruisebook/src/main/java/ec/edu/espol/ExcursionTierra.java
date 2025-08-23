@@ -49,6 +49,11 @@ public class ExcursionTierra extends ReservaDecorator {
     }
 
     @Override
+    public Crucero getCrucero(){
+        return reserva.getViajeCrucero().getCrucero();
+    }
+
+    @Override
     public int getId() {
         return reserva.getId();
     }

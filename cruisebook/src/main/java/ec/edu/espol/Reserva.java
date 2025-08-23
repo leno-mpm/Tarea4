@@ -19,6 +19,8 @@ public interface Reserva {
 
     public ViajeCrucero getViajeCrucero();
 
+    public Crucero getCrucero(); //Llamada interna a getCrucero de ViajeCrucero
+
     public int getId();
 
     public void setFechaReserva(Date fechaReserva);
