@@ -11,8 +11,7 @@ public class GerenciaCrucero {
         this.correo=correo;
         this.ID=ID;
     }
-    public GerenciaCrucero(){}
-    
+
     public void resolverProblema(String descripcion, Usuario usuario) {
         if (descripcion == null || usuario == null) throw new IllegalArgumentException("Los parámetros no pueden ser nulos");
         System.out.println("Gerencia del crucero atiende problema: " + descripcion);
