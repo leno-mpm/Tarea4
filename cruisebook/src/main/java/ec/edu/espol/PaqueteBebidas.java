@@ -48,6 +48,11 @@ public class PaqueteBebidas extends ReservaDecorator {
     }
 
     @Override
+    public Crucero getCrucero(){
+        return reserva.getViajeCrucero().getCrucero();
+    }
+
+    @Override
     public int getId() {
         return reserva.getId();
     }

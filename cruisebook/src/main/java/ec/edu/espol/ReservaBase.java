@@ -100,6 +100,11 @@ public class ReservaBase implements Reserva {
         return viajeCrucero;
     }
 
+    @Override
+    public Crucero getCrucero(){
+        return viajeCrucero.getCrucero();
+    }
+
     public void reservada(){
         estado = EstadoReserva.RESERVADA;
     }

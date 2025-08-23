@@ -14,10 +14,10 @@ public class PoliticaCancelacion {
     public boolean verificarCancelacion(Reserva reserva, Crucero crucero) {
         if(reserva==null) throw new IllegalArgumentException("Los paramatros no pueden ser nulos.");
         System.out.println(reserva.getEstado());
-        if (reserva.getEstado() == EstadoReserva.RESERVADA && crucero.getPoliticaCancelacion().equals(reserva.getPoliticaCancelacion())) {
-            return true;
-        }
-        return false;
+        boolean reservaEstadoReservada = reserva.getEstado() == EstadoReserva.RESERVADA;
+        boolean politicasCongruentes = crucero.getPoliticaCancelacion().equals(reserva.getPoliticaCancelacion());
+        
+        return reservaEstadoReservada && politicasCongruentes;
     }
 
     public int getId() {
