@@ -38,5 +38,21 @@ public abstract class Cabina {
     public boolean isDisponible() {
         return this.estado == EstadoCabina.DISPONIBLE;
     }
+
+    public void disponible(){
+        estado = EstadoCabina.DISPONIBLE;
+    }
+
+    public void reservada(){
+        estado = EstadoCabina.RESERVADA;
+    }
+
+    public void ocupada(){
+        estado = EstadoCabina.OCUPADA;
+    }
+
+    public void mantenimiento(){
+        estado = EstadoCabina.MANTENIMIENTO;
+    }
     
 }

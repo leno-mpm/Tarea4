@@ -28,33 +28,31 @@ public class ViajeCrucero {
         }
         reservas.add(reserva);
         agregarObservador(reserva.getUsuario());
+        actualizacionesEstadoCabina(reserva, EstadoCabina.OCUPADA);
+    }
+
+    public void actualizacionesEstadoCabina(Reserva reserva, EstadoCabina estadoCabina){
         for(Cabina cabina : cabinas) {
             if (cabina.equals(reserva.getCabina())) {
-                cabina.setEstado(EstadoCabina.OCUPADA);
+                cabina.setEstado(estadoCabina);
                 break;
             }
         }
-    }
-
-    public Date getFecha(){
-        return fechaSalida;
     }
 
     public void eliminarReserva(Reserva reserva) {
         if(reserva==null){
             throw new IllegalArgumentException("No puede ser nula la reserva");
         }
-        for (Cabina cabina : cabinas) {
-            if (cabina.equals(reserva.getCabina())) {
-                cabina.setEstado(EstadoCabina.DISPONIBLE);
-                break;
-            }   
-        }
+        actualizacionesEstadoCabina(reserva, EstadoCabina.DISPONIBLE);
         reservas.remove(reserva);
         eliminarObservador(reserva.getUsuario());
     }
         
-
+    public Date getFecha(){
+        return fechaSalida;
+    }
+    
     // Métodos para observadores
     public void agregarObservador(Observador observador) {
         if(observador==null){
@@ -157,7 +155,7 @@ public class ViajeCrucero {
     public Cabina asignarCabinaDisponible() {
         for (Cabina c : cabinas) {
             if (c.getEstado()==EstadoCabina.DISPONIBLE) {
-                c.setEstado(EstadoCabina.OCUPADA);
+                c.ocupada();
                 return c;
             }
         }

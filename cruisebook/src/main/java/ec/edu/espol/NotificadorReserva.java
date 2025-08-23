@@ -7,7 +7,7 @@ public class NotificadorReserva {
 
         Reserva reservaBuscada = buscarReserva(observador, viaje);
         if (reservaBuscada != null) {
-            reservaBuscada.setEstado(EstadoReserva.PENDIENTE);
+            reservaBuscada.pendiente();
             observador.accionNotificar(reservaBuscada);
         }
     }

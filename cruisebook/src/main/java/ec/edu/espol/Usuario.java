@@ -30,7 +30,7 @@ public class Usuario implements Observador {
         if (reserva == null) throw new IllegalArgumentException("La reserva no puede ser nula");
         if (reservas.contains(reserva)) throw new IllegalArgumentException("La reserva ya existe");
         reservas.add(reserva);
-        reserva.setEstado(EstadoReserva.RESERVADA);
+        reserva.reservada();
     }
 
     @Override
