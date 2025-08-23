@@ -100,9 +100,23 @@ public class ReservaBase implements Reserva {
         return viajeCrucero;
     }
 
-    
+    public void reservada(){
+        estado = EstadoReserva.RESERVADA;
+    }
 
+    public void confirmada(){
+        estado = EstadoReserva.CONFIRMADA;
+    }
 
-    
-    
+    public void cancelada(){
+        estado = EstadoReserva.CANCELADA;
+    }
+
+    public void finalizada(){
+        estado = EstadoReserva.FINALIZADA;
+    }
+
+    public void pendiente(){
+        estado = EstadoReserva.PENDIENTE;
+    }
 }

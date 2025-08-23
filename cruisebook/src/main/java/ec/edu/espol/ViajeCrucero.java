@@ -71,32 +71,15 @@ public class ViajeCrucero {
     }
 
     private void notificarObservadores(String mensaje) {
-        List<Observador> copiaObservadores =new ArrayList<>(observadores);
- 
+       List<Observador> copiaObservadores = new ArrayList<>(observadores);
         for (Observador observador : copiaObservadores) {
             observador.notificar(mensaje);
-            Reserva reservaBuscada= buscarReserva(observador);
-            if (reservaBuscada != null) {
-                reservaBuscada.setEstado(EstadoReserva.PENDIENTE);
-                observador.accionNotificar(reservaBuscada);
-            }
+            NotificadorReserva.gestionarNotificacion(observador, this, mensaje);
         }
     }
 
     public List<Observador> getObservadores(){
         return observadores;
-    }
-
-    private Reserva buscarReserva(Observador observador) {
-        if(observador== null){
-            throw new IllegalArgumentException("Se necesita el usuario para buscar reservas");
-        }
-        for(Reserva reserva : observador.getReservas()) {
-            if(reservas.contains(reserva)) {
-                return reserva;
-            }
-        }
-        return null; // No se encontró la reserva del observador
     }
 
     // Reprogramar fecha de salida

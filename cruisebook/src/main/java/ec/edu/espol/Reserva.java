@@ -24,4 +24,14 @@ public interface Reserva {
     public void setFechaReserva(Date fechaReserva);
 
     public void setViajeCrucero(ViajeCrucero viajeCrucero);
+
+    public void reservada();
+
+    public void confirmada();
+
+    public void cancelada();
+
+    public void finalizada();
+
+    public void pendiente();
 }
