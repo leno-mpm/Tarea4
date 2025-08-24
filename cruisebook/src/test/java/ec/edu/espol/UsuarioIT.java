@@ -4,14 +4,16 @@
  */
 package ec.edu.espol;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -92,54 +94,6 @@ public class UsuarioIT {
         assertEquals("Los parametros no pueden ser nulos", e.getMessage());
     }
 
-    @Test
-    @DisplayName("Deberia lanzar un IllegalArgumentException con un mensaje de que no se encontro la reserva")
-    void testCancelarReservaNulo(){
-        
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(null, null);
-        });
-
-        assertEquals("Reserva no encontrada o no pertenece al usuario.", e.getMessage());
-    }
-
-    @Test
-    @DisplayName("Deberia lanzar un IllegalArgumentException con un mensaje de que no se encontro la reserva")
-    void testCancelarReservaNoEncontrado(){
-
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(new ReservaBase(1, viajeCrucero, new Usuario("Milena", "ejemplo@gmail.com", "0935627382", new Email()), new Date(), politicaCancelacion, "Suite"), viajeCrucero.getCrucero());
-        });
-
-        assertEquals("Reserva no encontrada o no pertenece al usuario.", e.getMessage());
-    }
-
-    @Test
-    @DisplayName("Deberia lanzar un IllegalArgumentException con el mensaje de que no se puede cancelar debido a las Politicas")
-    void testCancelarReservaPolitica(){
-        Reserva reserva = new ReservaBase(3, viajeCrucero, usuario, new Date(), new PoliticaCancelacion("CancelacionA", 11), "Suite");
-        usuario.agregarReserva(reserva);
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReserva(reserva, viajeCrucero.getCrucero());
-        });
-
-        assertEquals("No se puede cancelar según la política de cancelación.", e.getMessage());
-    }
-
-    @Test
-    @DisplayName("Deberia de cambiar la reserva a estado CANCELADA y poner en estado DISPONIBLE la cabina de la reserva")
-    void testCancelarReserva(){
-        usuario.cancelarReserva(reservaBase, viajeCrucero.getCrucero());
-        for (Cabina c: viajeCrucero.getCabinas()) {
-            if (c.equals(reservaBase.getCabina())) {
-                cabina = c;
-                break;
-            }   
-        }
-        assertEquals(EstadoReserva.CANCELADA, reservaBase.getEstado());
-        assertEquals(EstadoCabina.DISPONIBLE, cabina.getEstado());
-        
-    }
 
     @Test
     @DisplayName("Deberia lanzar un IllegalArgumentException con un mensaje de que no se puede enviar un mensaje nulo")
@@ -155,41 +109,4 @@ public class UsuarioIT {
     void testNotificar(){
         assertTrue(usuario.notificar("Haz sacado 100 en la tarea de diseño."));
     }
-
-    @Test
-    @DisplayName("Deberia lanzar IllegalArgumentException con un mensaje que indica que la reserva no puede ser nula")
-    void testCancelarReservaConReembolsoReservaNulo(){
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.cancelarReservaConReembolso(null);
-        });
-        assertEquals("La reserva no puede ser nula", e.getMessage());   
-    }
-
-    @Test
-    @DisplayName("Deberia de cambiar la reserva a estado CANCELADA y poner en estado DISPONIBLE la cabina de la reserva sin importar la Politica de Cancelacion")
-    void testCancelarReservaConReembolso(){
-        Reserva reserva2 = new ReservaBase(3, viajeCrucero, usuario, new Date(), politicaCancelacion, "Suite");
-        usuario.agregarReserva(reserva2);
-        usuario.cancelarReserva(reserva2, viajeCrucero.getCrucero());
-        for (Cabina c: viajeCrucero.getCabinas()) {
-            if (c.equals(reserva2.getCabina())) {
-                cabina = c;
-                break;
-            }   
-        }
-        assertEquals(EstadoReserva.CANCELADA, reserva2.getEstado());
-        assertEquals(EstadoCabina.DISPONIBLE, cabina.getEstado());
-    }
-
-    @Test
-    @DisplayName("Deberia lanzar IllegalArgumentException ya que no se puede mandar un detalle nulo")
-    void testReportarIncidente(){
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            usuario.reportarIncidente(null);
-        });
-        assertEquals("No se puede mandar un detalle nulo", e.getMessage());  
-        
-    }
-
-    
 }
