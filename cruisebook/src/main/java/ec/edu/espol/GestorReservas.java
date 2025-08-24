@@ -3,7 +3,9 @@ package ec.edu.espol;
 public class GestorReservas {
 
     public void procesarAccion(Usuario usuario, Reserva reserva, String opcion) {
+        if (usuario == null) throw new IllegalArgumentException("El usuario no puede ser nulo");
         if (reserva == null) throw new IllegalArgumentException("La reserva no puede ser nula");
+        if (opcion == null) throw new IllegalArgumentException("La opción no puede ser nula");
 
         switch (opcion.toUpperCase()) {
             case "R":
@@ -18,6 +20,8 @@ public class GestorReservas {
     }
 
     public void cancelarReservaConReembolso(Usuario usuario, Reserva reserva) {
+        if (usuario == null) throw new IllegalArgumentException("El usuario no puede ser nulo");
+        if (reserva == null) throw new IllegalArgumentException("La reserva no puede ser nula");
         System.out.println("Procesando cancelación y reembolso para la reserva: " + reserva.getId());
         procesarReembolso(usuario);
         reserva.getViajeCrucero().eliminarReserva(reserva);
@@ -26,9 +30,9 @@ public class GestorReservas {
     }
 
     public void modificarReservaSinCargo(Reserva reserva) {
+        if (reserva == null) throw new IllegalArgumentException("La reserva no puede ser nula");
         reserva.confirmada();
-        System.out.println("Reserva modificada exitosamente al nuevo viaje: " 
-                + reserva.getViajeCrucero().getFecha());
+        System.out.println("Reserva modificada exitosamente al nuevo viaje: " + reserva.getViajeCrucero().getFecha());
     }
 
     private void procesarReembolso(Usuario usuario) {
