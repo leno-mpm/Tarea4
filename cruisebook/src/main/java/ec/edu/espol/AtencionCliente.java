@@ -12,7 +12,7 @@ public class AtencionCliente {
         if(descripcion==null || usuario==null){
             throw new IllegalArgumentException("Los paramatros no pueden ser nulos.");
         }
-        if(descripcion==""){
+        if(descripcion.equals("")){
             throw new IllegalArgumentException("La descripcion no puede estar vacia.");
         }
         System.out.println("Atención al Cliente atiende problema: " + descripcion);
